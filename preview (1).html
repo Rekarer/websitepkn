@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mind Map: Ancaman Keutuhan NKRI</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+            color: #fff;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        h1 {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #e94560, #ff6b6b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 30px rgba(233, 69, 96, 0.3);
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #a0a0a0;
+            margin-bottom: 50px;
+            font-size: 1.1rem;
+        }
+        
+        .mindmap-wrapper {
+            position: relative;
+            width: 100%;
+            height: 900px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 30px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+        }
+        
+        .center-node {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, #e94560 0%, #c23a51 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            font-weight: 800;
+            font-size: 1.3rem;
+            box-shadow: 0 0 60px rgba(233, 69, 96, 0.5), inset 0 0 20px rgba(255, 255, 255, 0.2);
+            z-index: 10;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .center-node:hover {
+            transform: translate(-50%, -50%) scale(1.1);
+            box-shadow: 0 0 80px rgba(233, 69, 96, 0.7);
+        }
+        
+        .branch {
+            position: absolute;
+            transform-origin: center;
+        }
+        
+        .main-branch {
+            width: 160px;
+            height: 160px;
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 5;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+        }
+        
+        .main-branch:hover {
+            transform: scale(1.15) !important;
+            z-index: 20;
+        }
+        
+        /* Posisi 6 cabang utama */
+        .branch-1 { top: 5%; left: 50%; transform: translateX(-50%); background: linear-gradient(135deg, #ff6b6b, #ee5a6f); }
+        .branch-2 { top: 20%; right: 5%; background: linear-gradient(135deg, #4ecdc4, #44a3aa); }
+        .branch-3 { bottom: 20%; right: 5%; background: linear-gradient(135deg, #ffe66d, #f4d03f); color: #1a1a2e; }
+        .branch-4 { bottom: 5%; left: 50%; transform: translateX(-50%); background: linear-gradient(135deg, #a29bfe, #6c5ce7); }
+        .branch-5 { bottom: 20%; left: 5%; background: linear-gradient(135deg, #fd79a8, #e84393); }
+        .branch-6 { top: 20%; left: 5%; background: linear-gradient(135deg, #00b894, #00a085); }
+        
+        .sub-branch {
+            position: absolute;
+            width: 130px;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            opacity: 0;
+            transform: scale(0.8);
+        }
+        
+        .sub-branch.visible {
+            opacity: 1;
+            transform: scale(1);
+        }
+        
+        .sub-branch:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.05);
+        }
+        
+        /* Sub-branches for each main branch */
+        .branch-1-subs .sub-1 { top: 120%; left: -80%; }
+        .branch-1-subs .sub-2 { top: 140%; left: 20%; }
+        .branch-1-subs .sub-3 { top: 120%; left: 120%; }
+        .branch-1-subs .sub-4 { top: 180%; left: -40%; }
+        .branch-1-subs .sub-5 { top: 180%; left: 60%; }
+        
+        .branch-2-subs .sub-1 { top: 20%; left: -140%; }
+        .branch-2-subs .sub-2 { top: 60%; left: -160%; }
+        .branch-2-subs .sub-3 { top: 100%; left: -140%; }
+        .branch-2-subs .sub-4 { top: 140%; left: -100%; }
+        
+        .branch-3-subs .sub-1 { top: 20%; left: -140%; }
+        .branch-3-subs .sub-2 { top: 60%; left: -160%; }
+        .branch-3-subs .sub-3 { top: 100%; left: -140%; }
+        .branch-3-subs .sub-4 { top: 140%; left: -100%; }
+        
+        .branch-4-subs .sub-1 { top: -40%; left: -80%; }
+        .branch-4-subs .sub-2 { top: -60%; left: 20%; }
+        .branch-4-subs .sub-3 { top: -40%; left: 120%; }
+        .branch-4-subs .sub-4 { top: -100%; left: -40%; }
+        .branch-4-subs .sub-5 { top: -100%; left: 60%; }
+        
+        .branch-5-subs .sub-1 { top: 20%; right: -140%; }
+        .branch-5-subs .sub-2 { top: 60%; right: -160%; }
+        .branch-5-subs .sub-3 { top: 100%; right: -140%; }
+        .branch-5-subs .sub-4 { top: 140%; right: -100%; }
+        
+        .branch-6-subs .sub-1 { top: 20%; right: -140%; }
+        .branch-6-subs .sub-2 { top: 60%; right: -160%; }
+        .branch-6-subs .sub-3 { top: 100%; right: -140%; }
+        .branch-6-subs .sub-4 { top: 140%; right: -100%; }
+        
+        .connector {
+            position: absolute;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transform-origin: left center;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+        
+        .connector.visible {
+            opacity: 1;
+        }
+        
+        .detail-panel {
+            position: fixed;
+            right: -400px;
+            top: 0;
+            width: 380px;
+            height: 100vh;
+            background: rgba(26, 26, 46, 0.98);
+            backdrop-filter: blur(20px);
+            border-left: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 40px 30px;
+            transition: right 0.4s ease;
+            z-index: 100;
+            overflow-y: auto;
+        }
+        
+        .detail-panel.active {
+            right: 0;
+        }
+        
+        .detail-panel h2 {
+            color: #e94560;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(233, 69, 96, 0.3);
+        }
+        
+        .detail-panel h3 {
+            color: #4ecdc4;
+            font-size: 1.1rem;
+            margin: 20px 0 10px 0;
+        }
+        
+        .detail-panel ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .detail-panel li {
+            padding: 8px 0;
+            padding-left: 20px;
+            position: relative;
+            color: #ccc;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+        
+        .detail-panel li:before {
+            content: "▸";
+            position: absolute;
+            left: 0;
+            color: #e94560;
+        }
+        
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            background: rgba(233, 69, 96, 0.2);
+            border: none;
+            border-radius: 50%;
+            color: #fff;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .close-btn:hover {
+            background: rgba(233, 69, 96, 0.5);
+            transform: rotate(90deg);
+        }
+        
+        .legend {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 15px 20px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            backdrop-filter: blur(10px);
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin: 5px 0;
+        }
+        
+        .legend-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 3px;
+            margin-right: 8px;
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(233, 69, 96, 0.7); }
+            50% { box-shadow: 0 0 0 20px rgba(233, 69, 96, 0); }
+        }
+        
+        .icon {
+            font-size: 2rem;
+            margin-bottom: 8px;
+        }
+        
+        @media (max-width: 1024px) {
+            .mindmap-wrapper {
+                height: 1200px;
+            }
+            .main-branch {
+                width: 120px;
+                height: 120px;
+                font-size: 0.8rem;
+            }
+            .center-node {
+                width: 150px;
+                height: 150px;
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🗺️ MIND MAP ANCAMAN KEUTUHAN NKRI</h1>
+        <p class="subtitle">Klik setiap cabang untuk melihat detail masalah dan sub-masalahnya</p>
+        
+        <div class="mindmap-wrapper" id="mindmap">
+            <!-- Center Node -->
+            <div class="center-node pulse" onclick="showDetail('center')">
+                <div>
+                    <div style="font-size: 2.5rem;">🇮🇩</div>
+                    <div>ANCAMAN<br>KEUTUHAN<br>NKRI</div>
+                </div>
+            </div>
+            
+            <!-- Branch 1: Ideologi -->
+            <div class="branch main-branch branch-1" onclick="toggleBranch('branch-1')">
+                <div class="icon">☪️✝️</div>
+                <div>RADIKALISME<br>& TERORISME</div>
+                <div class="branch-1-subs" id="branch-1-subs">
+                    <div class="sub-branch sub-1" onclick="event.stopPropagation(); showDetail('terorisme')">Terorisme Berbasis Agama</div>
+                    <div class="sub-branch sub-2" onclick="event.stopPropagation(); showDetail('radikalisme')">Radikalisme Politik</div>
+                    <div class="sub-branch sub-3" onclick="event.stopPropagation(); showDetail('isis')">Jaringan ISIS/IS</div>
+                    <div class="sub-branch sub-4" onclick="event.stopPropagation(); showDetail('fpi')">Ormas Terlarang</div>
+                    <div class="sub-branch sub-5" onclick="event.stopPropagation(); showDetail('khilafah')">Paham Khilafah</div>
+                </div>
+            </div>
+            
+            <!-- Branch 2: Separatisme -->
+            <div class="branch main-branch branch-2" onclick="toggleBranch('branch-2')">
+                <div class="icon">🏔️</div>
+                <div>GERAKAN<br>SEPARATIS</div>
+                <div class="branch-2-subs" id="branch-2-subs">
+                    <div class="sub-branch sub-1" onclick="event.stopPropagation(); showDetail('papua')">Papua Merdeka (OPM)</div>
+                    <div class="sub-branch sub-2" onclick="event.stopPropagation(); showDetail('aceh')">Aceh (GAM - Historis)</div>
+                    <div class="sub-branch sub-3" onclick="event.stopPropagation(); showDetail('maluku')">Republik Maluku Selatan</div>
+                    <div class="sub-branch sub-4" onclick="event.stopPropagation(); showDetail('regional')">Sentimen Regionalisme</div>
+                </div>
+            </div>
+            
+            <!-- Branch 3: Sosial Ekonomi -->
+            <div class="branch main-branch branch-3" onclick="toggleBranch('branch-3')">
+                <div class="icon">💰</div>
+                <div>KETIMPANGAN<br>SOSIAL-EKONOMI</div>
+                <div class="branch-3-subs" id="branch-3-subs">
+                    <div class="sub-branch sub-1" onclick="event.stopPropagation(); showDetail('kesenjangan')">Kesenjangan Antar Wilayah</div>
+                    <div class="sub-branch sub-2" onclick="event.stopPropagation(); showDetail('kemiskinan')">Kemiskinan Struktural</div>
+                    <div class="sub-branch sub-3" onclick="event.stopPropagation(); showDetail('pengangguran')">Pengangguran Massal</div>
+                    <div class="sub-branch sub-4" onclick="event.stopPropagation(); showDetail('korupsi')">Korupsi Sistemik</div>
+                </div>
+            </div>
+            
+            <!-- Branch 4: Politik -->
+            <div class="branch main-branch branch-4" onclick="toggleBranch('branch-4')">
+                <div class="icon">🏛️</div>
+                <div>POLARISASI<br>POLITIK</div>
+                <div class="branch-4-subs" id="branch-4-subs">
+                    <div class="sub-branch sub-1" onclick="event.stopPropagation(); showDetail('identitas')">Politik Identitas</div>
+                    <div class="sub-branch sub-2" onclick="event.stopPropagation(); showDetail('hoaks')">Penyebaran Hoaks</div>
+                    <div class="sub-branch sub-3" onclick="event.stopPropagation(); showDetail('radikalisasi')">Radikalisasi Demokrasi</div>
+                    <div class="sub-branch sub-4" onclick="event.stopPropagation(); showDetail('intoleransi')">Intoleransi Politik</div>
+                    <div class="sub-branch sub-5" onclick="event.stopPropagation(); showDetail('money')">Money Politics</div>
+                </div>
+            </div>
+            
+            <!-- Branch 5: Digital -->
+            <div class="branch main-branch branch-5" onclick="toggleBranch('branch-5')">
+                <div class="icon">📱</div>
+                <div>ANCAMAN<br> DIGITAL</div>
+                <div class="branch-5-subs" id="branch-5-subs">
+                    <div class="sub-branch sub-1" onclick="event.stopPropagation(); showDetail('cyber')">Serangan Cyber</div>
+                    <div class="sub-branch sub-2" onclick="event.stopPropagation(); showDetail('uudar')">Ujaran Kebencian</div>
+                    <div class="sub-branch sub-3" onclick="event.stopPropagation(); showDetail('propaganda')">Propaganda Asing</div>
+                    <div class="sub-branch sub-4" onclick="event.stopPropagation(); showDetail('disinformasi')">Disinformasi Massal</div>
+                </div>
+            </div>
+            
+            <!-- Branch 6: Geopolitik -->
+            <div class="branch main-branch branch-6" onclick="toggleBranch('branch-6')">
+                <div class="icon">🌏</div>
+                <div>GEOPOLITIK<br>& PERTAHANAN</div>
+                <div class="branch-6-subs" id="branch-6-subs">
+                    <div class="sub-branch sub-1" onclick="event.stopPropagation(); showDetail('laut')">Sengketa Perbatasan Laut</div>
+                    <div class="sub-branch sub-2" onclick="event.stopPropagation(); showDetail('asing')">Intervensi Asing</div>
+                    <div class="sub-branch sub-3" onclick="event.stopPropagation(); showDetail('spionase')">Spionase Intelijen</div>
+                    <div class="sub-branch sub-4" onclick="event.stopPropagation(); showDetail('narkoba')">Peredaran Narkoba Internasional</div>
+                </div>
+            </div>
+            
+            <div class="legend">
+                <div style="margin-bottom: 10px; font-weight: 700; color: #e94560;">Keterangan:</div>
+                <div class="legend-item"><div class="legend-color" style="background: #ff6b6b;"></div>Ideologi/Agama</div>
+                <div class="legend-item"><div class="legend-color" style="background: #4ecdc4;"></div>Separatisme</div>
+                <div class="legend-item"><div class="legend-color" style="background: #ffe66d;"></div>Sosial-Ekonomi</div>
+                <div class="legend-item"><div class="legend-color" style="background: #a29bfe;"></div>Politik</div>
+                <div class="legend-item"><div class="legend-color" style="background: #fd79a8;"></div>Digital</div>
+                <div class="legend-item"><div class="legend-color" style="background: #00b894;"></div>Geopolitik</div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Detail Panel -->
+    <div class="detail-panel" id="detailPanel">
+        <button class="close-btn" onclick="closeDetail()">×</button>
+        <div id="detailContent"></div>
+    </div>
+
+    <script>
+        const details = {
+            'center': {
+                title: 'Ancaman Keutuhan NKRI',
+                content: `
+                    <h3>Definisi</h3>
+                    <p style="color: #ccc; line-height: 1.8; margin-bottom: 20px;">
+                        Ancaman terhadap keutuhan Negara Kesatuan Republik Indonesia (NKRI) merujuk pada segala bentuk tantangan, gangguan, hambatan, dan ancaman baik yang datang dari dalam maupun luar negeri yang dapat membahayakan eksistensi, kedaulatan, keutuhan wilayah, dan keselamatan segenap bangsa Indonesia.
+                    </p>
+                    <h3>Klasifikasi Ancaman (6 Kategori)</h3>
+                    <ul>
+                        <li>Ancaman Ideologi & Radikalisme</li>
+                        <li>Ancaman Separatisme & Separatis Bersenjata</li>
+                        <li>Ancaman Sosial-Ekonomi</li>
+                        <li>Ancaman Politik & Polarisasi</li>
+                        <li>Ancaman Digital & Cyber</li>
+                        <li>Ancaman Geopolitik & Pertahanan</li>
+                    </ul>
+                    <h3>Payung Hukum</h3>
+                    <ul>
+                        <li>UUD 1945 (Pasal 30, 33, dan 37)</li>
+                        <li>UU No. 34 Tahun 2004 tentang TNI</li>
+                        <li>UU No. 3 Tahun 2002 tentang Pertahanan Negara</li>
+                        <li>UU No. 5 Tahun 2018 tentang Penyelenggaraan Intelijen Negara</li>
+                        <li>UU No. 7 Tahun 2017 tentang Pemilu</li>
+                        <li>UU ITE (Informasi dan Transaksi Elektronik)</li>
+                    </ul>
+                `
+            },
+            'terorisme': {
+                title: 'Terorisme Berbasis Agama',
+                content: `
+                    <h3>Definisi</h3>
+                    <p style="color: #ccc; line-height: 1.8; margin-bottom: 15px;">
+                        Tindakan kekerasan atau ancaman kekerasan yang berbasis pada interpretasi agama yang ekstrem untuk mencapai tujuan politis, ideologis, atau struktural.
+                    </p>
+                    <h3>Bentuk Ancaman</h3>
+                    <ul>
+                        <li>Bom bunuh diri di tempat umum</li>
+                        <li>Serangan terhadap aparat keamanan</li>
+                        <li>Penyerangan tempat ibadah minoritas</li>
+                        <li>Pembiayaan terorisme (money laundering)</li>
+                        <li>Rekrutmen anak-anak dan remaja</li>
+                        <li>Penggunaan media sosial untuk propaganda</li>
+                    </ul>
+                    <h3>Kasus Si
